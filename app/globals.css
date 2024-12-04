@@ -2,20 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.main-card {
+  @apply w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.normal-task-card {
+  @apply w-full p-6 bg-blue-400 border border-gray-200 rounded-xl shadow;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.high-task-card {
+  @apply w-full p-6 bg-orange-400 border border-gray-200 rounded-xl shadow
+}
+
+.done-task-card {
+  @apply w-full p-6 bg-green-400 border border-gray-200 rounded-xl shadow
 }

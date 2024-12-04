@@ -1,101 +1,121 @@
-import Image from "next/image";
+'use client'
+
+function addNewTask() {
+  console.log(555)
+}
+
+function doneTask() {
+  console.log(555)
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="grid justify-items-center p-8 h-min-screen bg-gradient-to-r from-orange-100 to-orange-50">
+      <div className="main-card opacity-90">
+        <div className="flex justify-between pb-6">
+          <div className="flex flex-row gap-3">
+            <p className="text-5xl font-bold h-20 content-center">6</p>
+            <div className="content-center">
+              <p>Tuesday</p>
+              <p>Dec 2024</p>
+            </div>
+          </div>
+          <button onClick={addNewTask} className="grid grid-cols-3 self-center bg-gray-100 rounded shadow w-30 h-10 p-2">
+            <div className="grid self-center justify-items-center content-center w-6 h-6 bg-teal-300 rounded-full border border-gray-200 shadow">
+              <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="5" y1="12" x2="19" y2="12" /></svg>
+            </div>
+            <p className="col-span-2 text-sm font-bold content-center">NEW TASK</p>
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <hr />
+        <div className="grid justify-items-center gap-4 py-6">
+          <p className="text-xl font-bold">TODO TASKS</p>
+          <div className="normal-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <div className="self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow"></div>
+            </div>
+          </div>
+          <div className="high-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <div className="self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow"></div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div className="grid justify-items-center gap-4 pt-6">
+          <p className="text-xl font-bold">DONE TASKS</p>
+          <div className="done-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
+                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
+              </button>
+            </div>
+          </div>
+          <div className="done-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
+                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
+              </button>
+            </div>
+          </div>
+          <div className="done-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
+                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
+              </button>
+            </div>
+          </div>
+          <div className="done-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
+                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
+              </button>
+            </div>
+          </div>
+          <div className="done-task-card">
+            <div className="flex justify-between">
+              <div className="self-center">
+                <p className="text-white font-bold">NORMAL PRIORITY</p>
+                <p className="text-white text-2xl font-bold">Buy IPhone</p>
+                <p className="text-white">go to IStudio</p>
+              </div>
+              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
+                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
