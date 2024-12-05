@@ -1,16 +1,52 @@
 'use client'
 
-function addNewTask() {
-  console.log(555)
-}
+import { DoneTaskCard } from "./components/done-task-card";
+import { TaskCard } from "./components/task-card";
+import { AddTask } from "./components/add-task-form";
+import { useEffect, useState } from "react";
+import { gql, request } from 'graphql-request'
 
-function doneTask() {
-  console.log(555)
+async function getTaskData() {
+  const document = gql`
+    {
+      task(where: {status: {_nilike: "inactive"}}) {
+        id
+        name
+        priority
+        description
+        user_id
+        status
+      }
+    }
+  `
+  const result = await request('http://localhost:8080/v1/graphql', document)
+  return result.task
 }
 
 export default function Home() {
+  const [openModal, setOpenModal] = useState(false)
+  const [task, setTask] = useState([])
+
+  function addNewTask() {
+    console.log('add new task')
+    setOpenModal(!openModal)
+  }
+
+  const initTask = async () => {
+    try {
+      const result = await getTaskData();
+      setTask(result)
+    } catch (error) {
+      return error
+    }
+  }
+
+  useEffect(() => {
+    initTask();
+  }, [])
+
   return (
-    <main className="grid justify-items-center p-8 h-min-screen bg-gradient-to-r from-orange-100 to-orange-50">
+    <main className="grid justify-items-center p-8 h-max-screen bg-gradient-to-r from-orange-100 to-orange-50">
       <div className="main-card opacity-90">
         <div className="flex justify-between pb-6">
           <div className="flex flex-row gap-3">
@@ -30,7 +66,7 @@ export default function Home() {
         <hr />
         <div className="grid justify-items-center gap-4 py-6">
           <p className="text-xl font-bold">TODO TASKS</p>
-          <div className="normal-task-card">
+          {/* <div className="normal-task-card">
             <div className="flex justify-between">
               <div className="self-center">
                 <p className="text-white font-bold">NORMAL PRIORITY</p>
@@ -49,73 +85,32 @@ export default function Home() {
               </div>
               <div className="self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow"></div>
             </div>
-          </div>
+          </div> */}
+          {task.filter((itemFilter) => itemFilter.status != "done").map((item) => (
+            <TaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} />
+          ))}
         </div>
         <hr />
         <div className="grid justify-items-center gap-4 pt-6">
           <p className="text-xl font-bold">DONE TASKS</p>
-          <div className="done-task-card">
+          {/* <div className="done-task-card">
             <div className="flex justify-between">
               <div className="self-center">
                 <p className="text-white font-bold">NORMAL PRIORITY</p>
                 <p className="text-white text-2xl font-bold">Buy IPhone</p>
                 <p className="text-white">go to IStudio</p>
               </div>
-              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
+              <button className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
                 <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
               </button>
             </div>
-          </div>
-          <div className="done-task-card">
-            <div className="flex justify-between">
-              <div className="self-center">
-                <p className="text-white font-bold">NORMAL PRIORITY</p>
-                <p className="text-white text-2xl font-bold">Buy IPhone</p>
-                <p className="text-white">go to IStudio</p>
-              </div>
-              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
-                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
-              </button>
-            </div>
-          </div>
-          <div className="done-task-card">
-            <div className="flex justify-between">
-              <div className="self-center">
-                <p className="text-white font-bold">NORMAL PRIORITY</p>
-                <p className="text-white text-2xl font-bold">Buy IPhone</p>
-                <p className="text-white">go to IStudio</p>
-              </div>
-              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
-                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
-              </button>
-            </div>
-          </div>
-          <div className="done-task-card">
-            <div className="flex justify-between">
-              <div className="self-center">
-                <p className="text-white font-bold">NORMAL PRIORITY</p>
-                <p className="text-white text-2xl font-bold">Buy IPhone</p>
-                <p className="text-white">go to IStudio</p>
-              </div>
-              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
-                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
-              </button>
-            </div>
-          </div>
-          <div className="done-task-card">
-            <div className="flex justify-between">
-              <div className="self-center">
-                <p className="text-white font-bold">NORMAL PRIORITY</p>
-                <p className="text-white text-2xl font-bold">Buy IPhone</p>
-                <p className="text-white">go to IStudio</p>
-              </div>
-              <button onClick={doneTask} className="flex justify-center self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow">
-                <div className="w-2/3 h-2/3 bg-lime-500 self-center rounded-full"></div>
-              </button>
-            </div>
-          </div>
+          </div> */}
+          {task.filter((itemFilter) => itemFilter.status == "done").map((item) => (
+            <DoneTaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} />
+          ))}
         </div>
       </div>
+      <AddTask setOpenModal={setOpenModal} openModal={openModal} initTask={initTask} />
     </main>
   );
 }
