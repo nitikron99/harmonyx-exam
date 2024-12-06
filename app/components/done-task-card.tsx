@@ -10,6 +10,7 @@ interface Props {
     description: String
   }
   setOpenModal: Dispatch<SetStateAction<boolean>>
+  setTask: Dispatch<SetStateAction<Props["taskData"]>>
 }
 
 export function DoneTaskCard(props: Props) {
@@ -38,8 +39,13 @@ export function DoneTaskCard(props: Props) {
     props.initTask()
   }
 
+  function editTask() {
+    props.setOpenModal(true)
+    props.setTask(props.taskData)
+  }
+
   return (
-    <div onClick={() => props.setOpenModal(true)} className="done-task-card cursor-pointer">
+    <div onClick={editTask} className="done-task-card cursor-pointer">
       <div className="flex justify-between">
         <div className="self-center">
           <p className="text-white font-bold">{props.taskData.priority == "high" ? "HIGH" : "NORMAL"} PRIORITY</p>

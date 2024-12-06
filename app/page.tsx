@@ -3,13 +3,15 @@
 import { DoneTaskCard } from "./components/done-task-card";
 import { TaskCard } from "./components/task-card";
 import { AddTask } from "./components/add-task-form";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { gql, request } from 'graphql-request'
+
+export const TaskContext = createContext(null)
 
 async function getTaskData() {
   const document = gql`
     {
-      task(where: {status: {_nilike: "inactive"}}) {
+      task(where: {status: {_nilike: "inactive"}}, order_by: {priority: asc, id: asc}) {
         id
         name
         priority
@@ -25,17 +27,19 @@ async function getTaskData() {
 
 export default function Home() {
   const [openModal, setOpenModal] = useState(false)
-  const [task, setTask] = useState([])
+  const [tasks, setTasks] = useState([])
+  const [task, setTask] = useState({ id: "", priority: "", name: "", description: "" })
 
   function addNewTask() {
     console.log('add new task')
     setOpenModal(!openModal)
+    setTask({ id: "", priority: "normal", name: "", description: "" })
   }
 
   const initTask = async () => {
     try {
       const result = await getTaskData();
-      setTask(result)
+      setTasks(result)
     } catch (error) {
       return error
     }
@@ -86,8 +90,8 @@ export default function Home() {
               <div className="self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow"></div>
             </div>
           </div> */}
-          {task.filter((itemFilter) => itemFilter.status != "done").map((item) => (
-            <TaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} />
+          {tasks.filter((itemFilter) => itemFilter.status != "done").map((item) => (
+            <TaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} setTask={setTask} />
           ))}
         </div>
         <hr />
@@ -105,12 +109,14 @@ export default function Home() {
               </button>
             </div>
           </div> */}
-          {task.filter((itemFilter) => itemFilter.status == "done").map((item) => (
-            <DoneTaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} />
+          {tasks.filter((itemFilter) => itemFilter.status == "done").map((item) => (
+            <DoneTaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} setTask={setTask} />
           ))}
         </div>
       </div>
-      <AddTask setOpenModal={setOpenModal} openModal={openModal} initTask={initTask} />
+      <TaskContext.Provider value={{ task, setTask }}>
+        <AddTask setOpenModal={setOpenModal} openModal={openModal} initTask={initTask} tasks={tasks[0]} />
+      </TaskContext.Provider>
     </main>
   );
 }
