@@ -5,13 +5,15 @@ import { TaskCard } from "./components/task-card";
 import { AddTask } from "./components/add-task-form";
 import { createContext, useEffect, useState } from "react";
 import { gql, request } from 'graphql-request'
+import moment from "moment";
+import Link from "next/link";
 
 export const TaskContext = createContext(null)
 
 async function getTaskData() {
   const document = gql`
     {
-      task(where: {status: {_nilike: "inactive"}}, order_by: {priority: asc, id: asc}) {
+      task(where: {status: {_nilike: "inactive"}, user_id: {_eq: 1}}, order_by: {priority: asc, id: asc}) {
         id
         name
         priority
@@ -23,6 +25,21 @@ async function getTaskData() {
   `
   const result = await request('http://localhost:8080/v1/graphql', document)
   return result.task
+}
+
+function formatDateTime(how: string) {
+  var result = ""
+  if (how == "dateNumber") {
+    result = moment().format("LLLL").split(",")[1].split(" ")[2]
+  } else if (how == "dateName") {
+    result = moment().format("LLLL").split(",")[0]
+  } else if (how == "month") {
+    result = moment().format("LLLL").split(",")[1].split(" ")[1]
+  } else if (how == "year") {
+    result = moment().format("LLLL").split(",")[2].split(" ")[1]
+  }
+
+  return result
 }
 
 export default function Home() {
@@ -50,14 +67,18 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="grid justify-items-center p-8 h-max-screen bg-gradient-to-r from-orange-100 to-orange-50">
-      <div className="main-card opacity-90">
+    <main className={`flex flex-col items-center p-8 ${tasks.length > 3 ? 'h-auto' : 'h-screen'} bg-gradient-to-r from-orange-100 to-orange-50`}>
+      <div className="flex justify-between w-5/12 m-4 bg-white p-5 rounded-lg bg-opacity-70 shadow">
+        <div className="text-xl font-bold">Welcome, Nitikron</div>
+        <Link href={'/login'} className="bg-gray-400 hover:bg-gray-300 border border-gray-200 rounded-md shadow h-10 p-4 flex items-center self-center">Logout</Link>
+      </div>
+      <div className="main-card opacity-90 h-fit">
         <div className="flex justify-between pb-6">
           <div className="flex flex-row gap-3">
-            <p className="text-5xl font-bold h-20 content-center">6</p>
+            <p className="text-5xl font-bold h-20 content-center">{formatDateTime("dateNumber")}</p>
             <div className="content-center">
-              <p>Tuesday</p>
-              <p>Dec 2024</p>
+              <p>{formatDateTime("dateName")}</p>
+              <p>{formatDateTime("month")} {formatDateTime("year")}</p>
             </div>
           </div>
           <button onClick={addNewTask} className="grid grid-cols-3 self-center bg-gray-100 rounded shadow w-30 h-10 p-2">
