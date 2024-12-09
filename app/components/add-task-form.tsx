@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function AddTask(props: Props) {
-  const { task, setTask } = useContext(TaskContext)
+  const { task, setTask, userData } = useContext(TaskContext)
   const [priority, setPriority] = useState("normal");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -41,7 +41,7 @@ export function AddTask(props: Props) {
       console.log('edit')
       const document = gql`
       mutation Updte {
-        update_task_by_pk (
+        update_tasks_by_pk (
           pk_columns: {id: ${task.id}}
           _set: {
             priority: "${task.priority}"
@@ -64,8 +64,8 @@ export function AddTask(props: Props) {
     } else {
       console.log('add new')
       const document = gql`
-      mutation InsertTask($priority: String!, $name: String!, $description: String!, $user_id: Int, $status: String!) {
-        insert_task_one(object: {priority: $priority, name: $name, description: $description, user_id: $user_id, status: $status}){
+      mutation InsertTasks($priority: String!, $name: String!, $description: String!, $user_id: Int, $status: String!) {
+        insert_tasks_one(object: {priority: $priority, name: $name, description: $description, user_id: $user_id, status: $status}){
           priority,
           name,
           description,
@@ -78,7 +78,7 @@ export function AddTask(props: Props) {
         "priority": task.priority,
         "name": task.name,
         "description": task.description,
-        "user_id": 3,
+        "user_id": userData.id,
         "status": "not done"
       }
 

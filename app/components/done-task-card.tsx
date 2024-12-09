@@ -20,7 +20,7 @@ export function DoneTaskCard(props: Props) {
     console.log('undone task card')
     const document = gql`
       mutation Updte {
-        update_task_by_pk (
+        update_tasks_by_pk (
           pk_columns: {id: ${id}}
           _set: { status: "not done" }
         ) {
@@ -44,7 +44,7 @@ export function DoneTaskCard(props: Props) {
     console.log('done task card')
     const document = gql`
       mutation Updte {
-        update_task_by_pk (
+        update_tasks_by_pk (
           pk_columns: {id: ${id}}
           _set: { status: "inactive" }
         ) {

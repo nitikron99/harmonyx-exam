@@ -3,29 +3,14 @@
 import { DoneTaskCard } from "./components/done-task-card";
 import { TaskCard } from "./components/task-card";
 import { AddTask } from "./components/add-task-form";
+import { HomeAction, Logout } from "./action";
 import { createContext, useEffect, useState } from "react";
 import { gql, request } from 'graphql-request'
 import moment from "moment";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const TaskContext = createContext(null)
-
-async function getTaskData() {
-  const document = gql`
-    {
-      task(where: {status: {_nilike: "inactive"}, user_id: {_eq: 1}}, order_by: {priority: asc, id: asc}) {
-        id
-        name
-        priority
-        description
-        user_id
-        status
-      }
-    }
-  `
-  const result = await request('http://localhost:8080/v1/graphql', document)
-  return result.task
-}
 
 function formatDateTime(how: string) {
   var result = ""
@@ -43,9 +28,11 @@ function formatDateTime(how: string) {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [openModal, setOpenModal] = useState(false)
   const [tasks, setTasks] = useState([])
   const [task, setTask] = useState({ id: "", priority: "", name: "", description: "" })
+  const [userData, setUserData] = useState({})
 
   function addNewTask() {
     console.log('add new task')
@@ -55,11 +42,17 @@ export default function Home() {
 
   const initTask = async () => {
     try {
-      const result = await getTaskData();
-      setTasks(result)
+      const result = await HomeAction();
+      setTasks(result.tasks)
+      setUserData(result.userData)
     } catch (error) {
       return error
     }
+  }
+
+  const handleLogout = async () => {
+    await Logout()
+    router.push('/login')
   }
 
   useEffect(() => {
@@ -69,8 +62,8 @@ export default function Home() {
   return (
     <main className={`flex flex-col items-center p-8 ${tasks.length > 3 ? 'h-auto' : 'h-screen'} bg-gradient-to-r from-orange-100 to-orange-50`}>
       <div className="flex justify-between w-5/12 m-4 bg-white p-5 rounded-lg bg-opacity-70 shadow">
-        <div className="text-xl font-bold">Welcome, Nitikron</div>
-        <Link href={'/login'} className="bg-gray-400 hover:bg-gray-300 border border-gray-200 rounded-md shadow h-10 p-4 flex items-center self-center">Logout</Link>
+        <div className="text-xl font-bold">Welcome, {userData.firstname} {userData.lastname}</div>
+        <button onClick={handleLogout} className="bg-red-500 hover:bg-gray-300 border border-gray-200 rounded-md shadow text-white h-10 p-4 flex items-center self-center">Logout</button>
       </div>
       <div className="main-card opacity-90 h-fit">
         <div className="flex justify-between pb-6">
@@ -111,6 +104,13 @@ export default function Home() {
               <div className="self-center w-10 h-10 bg-white rounded-full border border-gray-200 shadow"></div>
             </div>
           </div> */}
+          {tasks.filter((item) => item.status !== 'done').length < 1 &&
+            <div className="not-have-task-card">
+              <div className="flex justify-center">
+                <p className="text-white">Not have task.</p>
+              </div>
+            </div>
+          }
           {tasks.filter((itemFilter) => itemFilter.status != "done").map((item) => (
             <TaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} setTask={setTask} />
           ))}
@@ -130,12 +130,19 @@ export default function Home() {
               </button>
             </div>
           </div> */}
+          {tasks.filter((item) => item.status === 'done').length < 1 &&
+            <div className="not-have-task-card">
+              <div className="flex justify-center">
+                <p className="text-white">Not have done task.</p>
+              </div>
+            </div>
+          }
           {tasks.filter((itemFilter) => itemFilter.status == "done").map((item) => (
             <DoneTaskCard key={item.id} taskData={item} initTask={initTask} setOpenModal={setOpenModal} setTask={setTask} />
           ))}
         </div>
       </div>
-      <TaskContext.Provider value={{ task, setTask }}>
+      <TaskContext.Provider value={{ task, setTask, userData }}>
         <AddTask setOpenModal={setOpenModal} openModal={openModal} initTask={initTask} tasks={tasks[0]} />
       </TaskContext.Provider>
     </main>

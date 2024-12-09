@@ -6,6 +6,10 @@
   @apply w-5/12 p-6 bg-white border border-gray-200 rounded-lg shadow;
 }
 
+.not-have-task-card {
+  @apply w-full p-6 bg-slate-400 border border-gray-200 rounded-xl shadow;
+}
+
 .normal-task-card {
   @apply w-full p-6 bg-blue-400 border border-gray-200 rounded-xl shadow;
 }

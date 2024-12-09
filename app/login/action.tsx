@@ -20,10 +20,10 @@ export async function LoginAction(prevState: ActionState, formData: FormData) {
   var document = ''
   var variable = {}
 
-  async function getUser() {
+  async function getUsers() {
     var document = gql`
       {
-        user(where: {username: {_eq: "${username}"}}) {
+        users(where: {username: {_eq: "${username}"}}) {
           id
           firstname
           lastname
@@ -32,25 +32,25 @@ export async function LoginAction(prevState: ActionState, formData: FormData) {
       }
     `
     const result = await request('http://localhost:8080/v1/graphql', document)
-    return result.user
+    return result.users
   }
 
   if (!username || !password) {
     return { status: false, message: 'Please complete all input!', payload: formData }
   }
 
-  var user = await getUser()
-  if (user.length < 1) {
+  var users = await getUsers()
+  if (users.length < 1) {
     return { status: false, message: 'The username or password is incorrect!', payload: formData }
   }
 
-  var comparePassword = await bcrypt.compare(password, user[0].password)
+  var comparePassword = await bcrypt.compare(password, users[0].password)
   if (!comparePassword) {
     return { status: false, message: 'The username or password is incorrect!', payload: formData }
   }
 
   const secret = 'harmonyx'
-  const token = jwt.sign({ id: user[0].id, firstname: user[0].firstname, lastname: user[0].lastname }, secret, { expiresIn: '1h' })
+  const token = jwt.sign({ id: users[0].id, firstname: users[0].firstname, lastname: users[0].lastname }, secret, { expiresIn: '1h' })
   const cookieStore = await cookies()
   cookieStore.set({
     name: 'token',

@@ -24,13 +24,13 @@ export async function RegisterAction(prevState: ActionState, formData: FormData)
   async function checkUser() {
     var document = gql`
       {
-        user(where: {username: {_eq: "${username}"}}) {
+        users(where: {username: {_eq: "${username}"}}) {
           id
         }
       }
     `
     const result = await request('http://localhost:8080/v1/graphql', document)
-    return result.user.length
+    return result.users.length
   }
 
   if (!firstname || !lastname || !username || !password || !confirmPassword) {
@@ -49,8 +49,8 @@ export async function RegisterAction(prevState: ActionState, formData: FormData)
   var passwordHash = await bcrypt.hash(password, saltRounds)
 
   document = gql`
-      mutation InsertUser($firstname: String!, $lastname: String!, $username: String!, $password: String!) {
-        insert_user_one(object: {firstname: $firstname, lastname: $lastname, username: $username, password: $password}){
+      mutation InsertUsers($firstname: String!, $lastname: String!, $username: String!, $password: String!) {
+        insert_users_one(object: {firstname: $firstname, lastname: $lastname, username: $username, password: $password}){
           firstname,
           lastname,
           username,
