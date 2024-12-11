@@ -31,7 +31,7 @@ export function DoneTaskCard(props: Props) {
     `
 
     try {
-      await request("http://localhost:8080/v1/graphql", document)
+      await request("http://3.27.122.22:8080/v1/graphql", document)
     } catch (error) {
       return error
     }
@@ -55,7 +55,7 @@ export function DoneTaskCard(props: Props) {
     `
 
     try {
-      await request("http://localhost:8080/v1/graphql", document)
+      await request("http://3.27.122.22:8080/v1/graphql", document)
     } catch (error) {
       return error
     }

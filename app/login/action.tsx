@@ -31,7 +31,7 @@ export async function LoginAction(prevState: ActionState, formData: FormData) {
         }
       }
     `
-    const result = await request('http://localhost:8080/v1/graphql', document)
+    const result = await request('http://3.27.122.22:8080/v1/graphql', document)
     return result.users
   }
 

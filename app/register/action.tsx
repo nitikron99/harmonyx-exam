@@ -29,7 +29,7 @@ export async function RegisterAction(prevState: ActionState, formData: FormData)
         }
       }
     `
-    const result = await request('http://localhost:8080/v1/graphql', document)
+    const result = await request('http://3.27.122.22:8080/v1/graphql', document)
     return result.users.length
   }
 
@@ -66,7 +66,7 @@ export async function RegisterAction(prevState: ActionState, formData: FormData)
   }
 
   try {
-    await request('http://localhost:8080/v1/graphql', document, variable)
+    await request('http://3.27.122.22:8080/v1/graphql', document, variable)
   } catch (error) {
     return { status: false, message: `Error : ${error ? error : 'Somthing went wrong!'}`, payload: formData }
   }

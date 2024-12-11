@@ -56,7 +56,7 @@ export function AddTask(props: Props) {
     `
 
       try {
-        const result = await request("http://localhost:8080/v1/graphql", document)
+        const result = await request("http://3.27.122.22:8080/v1/graphql", document)
         console.log(result)
       } catch (error) {
         return error
@@ -83,7 +83,7 @@ export function AddTask(props: Props) {
       }
 
       try {
-        await request("http://localhost:8080/v1/graphql", document, variable)
+        await request("http://3.27.122.22:8080/v1/graphql", document, variable)
       } catch (error) {
         return error
       }
